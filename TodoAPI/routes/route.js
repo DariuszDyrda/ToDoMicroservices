@@ -3,11 +3,6 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Todo = require('../models/todo');
 
-router.use(function(req, res, next) {
-    console.log(`${req.method} request has been made to ${req.originalUrl} on ${Date.now()}`);
-    next();
-})
-
 router.get('/todos', (req, res) => {
     Todo.find({}, (err, todos) => {
         if(err) {
