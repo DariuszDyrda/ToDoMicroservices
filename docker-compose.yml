@@ -10,6 +10,12 @@ services:
       - "8080:8080"
     links:
       - mongo
+  client:
+    container_name: todo-client
+    restart: always
+    build: ./todo-client
+    ports:
+      - "3000:3000"
   mongo:
     container_name: mongo
     image: mongo
