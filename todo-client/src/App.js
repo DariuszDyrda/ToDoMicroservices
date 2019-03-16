@@ -1,34 +1,42 @@
 import React, { Component } from 'react';
-import './App.css';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid'
+import ButtonAppBar from './ButtonAppBar';
+import Form from './Form';
+import TodoList from './TodoList'
+
+const styles = {
+  App: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  }
+}
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {todos: []};
+    this.state = {value: ''};
+    this.handleSumbit = this.handleSumbit.bind(this);
   }
 
-  async componentWillMount() {
-    var todos = [];
-    todos = await fetch("http://localhost:8080/api/todos")
-      .then(data => data.json())
-      .then(data => data)
-      .catch(err => {
-        console.log(err)
-      })
-    console.log(todos);
-    this.setState({todos});
+  handleSumbit(value) {
+    this.setState({ value });
   }
-
   render() {
-    var view = this.state.todos.map(todo => {
-      return <p key={todo._id}>{todo.task}</p>
-    })
+    const { classes } = this.props;
     return (
-      <div className="App">
-        {view}
+      <div className={classes.App}>
+        <Grid item xs={12}>
+          <ButtonAppBar />
+        </Grid>
+        <Grid item xs={10} sm={8} md={6}>
+          <Form onSubmit={this.handleSumbit}/>
+          <TodoList />
+        </Grid>
       </div>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);

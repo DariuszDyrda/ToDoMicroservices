@@ -6,7 +6,7 @@ const Todo = require('../models/todo');
 router.get('/todos', (req, res) => {
     Todo.find({}, (err, todos) => {
         if(err) {
-            res.json({message: "Error"})
+            res.json(err)
         } else {
             res.json(todos);
         }
@@ -14,10 +14,10 @@ router.get('/todos', (req, res) => {
 })
 
 router.post('/todos', (req, res) => {
-    var newTodo = new Todo({task: req.body.task, completed: false});
+    var newTodo = new Todo({task: req.body.task, completed: req.body.completed || false});
     newTodo.save((err) => {
         if(err) {
-            res.json({message: "Couldn't save"});
+            res.json(err);
         } else {
             res.json(newTodo);
         }
@@ -46,6 +46,16 @@ router.put('/todos/:id', (req, res) => {
                 todo.completed = req.body.completed;
             }
             todo.save();
+            res.json(todo);
+        }
+    });
+})
+
+router.delete('/todos/:id', (req, res) => {
+    Todo.findByIdAndRemove(req.params.id, (err, todo) => {
+        if(err) {
+            res.json(err);
+        } else {
             res.json(todo);
         }
     });

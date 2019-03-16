@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TodoSchema = new Schema({
-    task: String,
-    completed: Boolean
+    task: {type: String, required: true},
+    completed: {type: Boolean, required: true}
 })
 
 var Todo = mongoose.model('todo',TodoSchema);
