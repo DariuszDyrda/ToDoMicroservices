@@ -7,6 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Drawer from '@material-ui/core/Drawer';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import ListItemText from '@material-ui/core/ListItemText';
 import { Link } from "react-router-dom";
 
 import { store }  from '../../store';
@@ -28,16 +32,21 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
+  list: {
+    width: 250
+  }
 };
 
 class ButtonAppBar extends Component {
   constructor(props) {
       super(props);
-      this.handleClick = this.handleClick.bind(this);
+      this.state = {
+        drawer: false
+      }
       this.handleLogOut = this.handleLogOut.bind(this);
   }
-  handleClick() {
-
+  toggleDrawer = (open) => () => {
+    this.setState({drawer: open});
   }
 
   componentDidUpdate() {
@@ -60,13 +69,36 @@ class ButtonAppBar extends Component {
     } else {
       signInButton = (<Button color="inherit" onClick={this.handleLogOut}>Logout</Button>)
     }
+
+    const sideList = (
+      <div className={classes.list}>
+        <List>
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    );
+
     return (
         <div className={classes.root}>
         <AppBar position="static">
             <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.handleClick}>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                 <MenuIcon />
             </IconButton>
+            <Drawer open={this.state.drawer} onClose={this.toggleDrawer(false)}>
+              <div
+                tabIndex={0}
+                role="button"
+                onClick={this.toggleDrawer(false)}
+                onKeyDown={this.toggleDrawer(false)}
+              >
+                {sideList}
+              </div>
+            </Drawer>
             <Typography variant="h6" color="inherit" className={classes.grow}>
                 TODO App
             </Typography>
