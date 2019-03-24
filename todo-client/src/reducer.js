@@ -16,13 +16,13 @@ function reducer(state = defaultState, action) {
           return newState;
         }
         case "TOGGLE_CHECK": {
-          let newState = Object.assign({}, state);
-          newState.todos = newState.todos.map(val => {
+          let todos = state.todos.map(val => {
             if(val._id === action.todo._id) {
               val.completed = action.todo.completed;
             }
             return val;
           });
+          let newState = Object.assign({}, state, { todos });
           
           return newState;
         }
