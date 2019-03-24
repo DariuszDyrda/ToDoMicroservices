@@ -15,7 +15,7 @@ services:
     restart: always
     build: ./todo-client
     ports:
-      - "3000:3000"
+      - "80:3000"
   mongo:
     container_name: mongo
     image: mongo
