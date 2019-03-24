@@ -13,16 +13,7 @@ const styles = {
   }
 }
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {value: ''};
-    this.handleSumbit = this.handleSumbit.bind(this);
-  }
-
-  handleSumbit(value) {
-    this.setState({ value });
-  }
+class MainPage extends Component {
   render() {
     const { classes } = this.props;
     return (
@@ -31,7 +22,7 @@ class App extends Component {
           <ButtonAppBar />
         </Grid>
         <Grid item xs={10} sm={8} md={6}>
-          <Form onSubmit={this.handleSumbit}/>
+          <Form />
           <TodoList />
         </Grid>
       </div>
@@ -39,4 +30,4 @@ class App extends Component {
   }
 }
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(MainPage);

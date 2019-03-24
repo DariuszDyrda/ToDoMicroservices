@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 
 import { connect } from 'react-redux';
-import { addNewTodo } from './actionTypes';
+import { addNewTodo } from '../../actions/actionTypes';
 import { compose } from 'recompose';
 
 const API_URL = 'http://localhost:8080/api/todos'
@@ -43,8 +43,8 @@ class Form extends Component {
             method: "POST",
             mode: "cors",
             headers: {
+                'authorization': `Bearer ${this.props.token}`,
                 "Content-Type": "application/json",
-               //"Content-Type": "application/x-www-form-urlencoded",
             },
             body: JSON.stringify(newTodo),
         })
@@ -60,7 +60,7 @@ class Form extends Component {
         return (
                 <form noValidate autoComplete="off" onSubmit={this.handleSubmit} className={this.props.classes.root}>
                     <TextField 
-                    placeholder="What you want to do?" 
+                    placeholder="What do you want to do?" 
                     onChange={this.handleChange} 
                     value={this.state.inputVal}
                     variant="outlined"
@@ -78,7 +78,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-    return state;
+    return state.reducer;
 }
 
 export default compose(

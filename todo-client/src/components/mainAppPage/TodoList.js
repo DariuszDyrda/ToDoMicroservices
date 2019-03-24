@@ -7,7 +7,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { connect } from 'react-redux';
-import { loadTodos, toggleCheck, deleteTodo } from './actionTypes';
+import { loadTodos, toggleCheck, deleteTodo } from '../../actions/actionTypes';
 import { compose } from 'recompose';
 
 const API_URL = 'http://localhost:8080/api/todos/'
@@ -37,7 +37,7 @@ class TodoList extends Component {
         mode: "cors",
         headers: {
             "Content-Type": "application/json",
-           //"Content-Type": "application/x-www-form-urlencoded",
+            'authorization': `Bearer ${this.props.token}`,
         },
         body:JSON.stringify({"completed": checked.toString()}), // body data type must match "Content-Type" header
       })
@@ -48,11 +48,14 @@ class TodoList extends Component {
       this.props.toggleCheck(todo);
       };
 
-      async handleDelete(value) {
+    async handleDelete(value) {
         const url = API_URL + value._id;
         let deletedTodo = await fetch(url, {
           method: "DELETE",
           mode: "cors",
+          headers: {
+            'authorization': `Bearer ${this.props.token}`,
+        },
         })
         .then(data => data.json())
         .then(data => data)
@@ -62,33 +65,45 @@ class TodoList extends Component {
       }
 
 
-      async componentWillMount() {
-        let todos = await fetch(API_URL)
+    async componentWillMount() {
+      if(this.props.token) {
+        let todos = await fetch(API_URL, {
+          mode: 'cors',
+          headers: {
+            'authorization': `Bearer ${this.props.token}`
+          }
+        })
           .then(data => data.json())
           .then(data => data)
           .catch(err => console.log(err));
           this.props.loadTodos(todos);
       }
+      }
 
-      render() {
+    render() {
         const { classes } = this.props;
+        if(!this.props.token) {
+          return (
+            <div>LOADING... TodoList</div>
+          )
+        }
         return (
-          <List className={classes.root}>
-            {this.props.todos.map(value => (
-              <div style={{display: 'flex'}}>
-              <ListItem key={value._id} role={undefined} dense button 
-                onClick={this.handleToggle.bind(this, value)}>
-                <Checkbox
-                  checked={value.completed}
-                  tabIndex={-1}
-                  disableRipple
-                />
-                <ListItemText primary={value.task} />
-              </ListItem>
-              <DeleteIcon dense button className={classes.icon} onClick={this.handleDelete.bind(this, value)}/>
-              </div>
-            ))}
-          </List>
+            <List className={classes.root}>
+              {this.props.todos.map(value => (
+                <div key={value._id} style={{display: 'flex'}}>
+                <ListItem role={undefined} button
+                  onClick={this.handleToggle.bind(this, value)}>
+                  <Checkbox
+                    checked={value.completed}
+                    tabIndex={-1}
+                    disableRipple
+                  />
+                  <ListItemText primary={value.task} />
+                </ListItem>
+                <DeleteIcon button className={classes.icon} onClick={this.handleDelete.bind(this, value)}/>
+                </div>
+              ))}
+            </List>
         );
       }
 }
@@ -101,7 +116,7 @@ function mapDispatchToProps(dispatch) {
     }
 }
 function mapStateToProps(state) {
-    return state;
+    return state.reducer;
 }
 
 export default compose(
