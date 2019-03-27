@@ -17,6 +17,7 @@ if(MODE !== "test") {
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cors());
+app.options('*', cors());
 app.use(morgan('tiny'));
 app.use(passport.initialize());
 app.use('/api', require("./routes/route"));
