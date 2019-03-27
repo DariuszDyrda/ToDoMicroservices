@@ -5,8 +5,6 @@ services:
     restart: always
     build: ./TodoAPI
     image: debian/latest
-    ports:
-      - "8080:8080"
     links:
       - mongo
     depends_on:
