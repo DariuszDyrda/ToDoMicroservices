@@ -23,7 +23,8 @@ import { login } from '../../actions/actionTypes'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-const LOGIN_URL = 'http://localhost:8080/api/login'
+const LOGIN_URL = `http://${window.location.hostname}:8080/api/login`
+
 
 const styles = theme => ({
   main: {

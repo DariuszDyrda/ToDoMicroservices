@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { addNewTodo } from '../../actions/actionTypes';
 import { compose } from 'recompose';
 
-const API_URL = 'http://localhost:8080/api/todos'
+const API_URL = `http://${window.location.hostname}:8080/api/todos`
 
 const styles = {
     root: {
