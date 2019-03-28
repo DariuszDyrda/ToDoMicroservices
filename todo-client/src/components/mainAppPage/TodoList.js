@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { loadTodos, toggleCheck, deleteTodo } from '../../actions/actionTypes';
 import { compose } from 'recompose';
 
-const API_URL = 'http://localhost:8080/api/todos/'
+const API_URL = `http://${window.location.hostname}:8080/api/todos/`
 
 const styles = theme => ({
     root: {
@@ -67,16 +67,17 @@ class TodoList extends Component {
 
     async componentWillMount() {
       if(this.props.token) {
-        let todos = await fetch(API_URL, {
+        await fetch(API_URL, {
           mode: 'cors',
           headers: {
             'authorization': `Bearer ${this.props.token}`
           }
         })
           .then(data => data.json())
-          .then(data => data)
+          .then(data => {
+            this.props.loadTodos(data);
+          })
           .catch(err => console.log(err));
-          this.props.loadTodos(todos);
       }
       }
 
