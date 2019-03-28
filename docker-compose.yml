@@ -23,7 +23,7 @@ services:
     volumes:
       - data-volume:/data/db
     ports:
-      - 27017:27017
+      - "27017:27017"
 
 volumes:
   data-volume:

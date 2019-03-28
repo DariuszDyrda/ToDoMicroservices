@@ -1,4 +1,4 @@
-const MODE = "test";
+const MODE = "prod";
 
 const express = require('express');
 const app = express();
