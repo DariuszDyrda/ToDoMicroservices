@@ -1,5 +1,12 @@
-version: "2"
+version: "3"
 services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - 27017:27017
   app:
     container_name: todoapi
     restart: always
@@ -7,8 +14,6 @@ services:
     image: debian/latest
     ports:
       - "8080:8080"
-    links:
-      - mongo
     depends_on:
       - mongo
   client:
@@ -17,13 +22,6 @@ services:
     build: ./todo-client
     ports:
       - "80:3000"
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    volumes:
-      - data-volume:/data/db
-    ports:
-      - "27017:27017"
 
 volumes:
   data-volume:
