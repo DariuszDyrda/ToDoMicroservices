@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { loadTodos, toggleCheck, deleteTodo } from '../../actions/actionTypes';
 import { compose } from 'recompose';
 
-const API_URL = `http://${window.location.hostname}:8080/api/todos/`
+const API_URL = `/api/todos/`
 
 const styles = theme => ({
     root: {

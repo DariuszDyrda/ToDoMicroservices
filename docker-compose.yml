@@ -2,26 +2,26 @@ version: "3"
 services:
   mongo:
     image: mongo:latest
-    container_name: mongo
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - '3050:80'
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./TodoAPI
+    environment:
+      - mongoURL=mongodb://mongo:27017/todos
     volumes:
-      - data-volume:/data/db
-    ports:
-      - 27017:27017
-  app:
-    container_name: todoapi
-    restart: always
-    build: ./TodoAPI
-    image: debian/latest
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongo
+      - /app/node_modules
+      - ./TodoAPI:/usr/src/app
   client:
-    container_name: todo-client
-    restart: always
-    build: ./todo-client
-    ports:
-      - "80:3000"
-
-volumes:
-  data-volume:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./todo-client
+    volumes:
+      - /app/node_modules
+      - ./todo-client:/usr/src/app

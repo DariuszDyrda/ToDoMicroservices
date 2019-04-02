@@ -18,7 +18,7 @@ import { login, register } from '../../actions/actionTypes'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-const REGISTER_URL = `http://${window.location.hostname}:8080/api/register`
+const REGISTER_URL = `/api/register`
 
 const styles = theme => ({
   main: {

@@ -1,5 +1,3 @@
-const MODE = "prod";
-
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -9,8 +7,7 @@ const bodyParser = require('body-parser');
 
 const passport = require('./config/passport')
 
-const dbURL = MODE==='test' ? "mongodb://localhost:27017/todo-test" : process.env.mongoURL;
-
+const dbURL = process.env.mongoURL ? process.env.mongoURL : "mongodb://localhost:27017/todo-test";
 var db = mongoose.connection;
 
 db.on('connecting', function() {
@@ -41,8 +38,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.use(cors());
 app.use(morgan('tiny'));
 app.use(passport.initialize());
-app.use('/api', require("./routes/route"));
-app.use('/api', require("./routes/user"));
+app.use(require("./routes/route"));
+app.use(require("./routes/user"));
 
 app.listen(process.env.PORT || 8080, () => {
     console.log("The server has started!");

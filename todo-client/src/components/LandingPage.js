@@ -34,7 +34,7 @@ class LandingPage extends Component {
             <Grid item xs={12}>
                 <div className={classes.root}>
                     <div>
-                        <h1 className={classes.title}>It's just a simple TODO App<br></br><span className={classes.span}>by Dariusz Dyrda</span></h1>
+                        <h1 className={classes.title}>It's just a simple TODO App<br></br><span className={classes.span}>by Dariusz</span></h1>
                     </div>
                     <img src={require("../resources/render.png")} alt="render" className={classes.img}></img>
                 </div>
