@@ -18,3 +18,10 @@ after_success:
   - docker push dariuszdyrda/multi-client
   - docker push dariuszdyrda/multi-nginx
   - docker push dariuszdyrda/multi-api
+
+  deploy:
+    provider: gae
+    keyfile: ./computeEngineServiceKey.json
+    on:
+      branch: master
+    project: todo-microservices
