@@ -69,6 +69,9 @@ class SignUp extends Component {
     async handleSubmit(e) {
       e.preventDefault();
       let credentials = {username: this.state.email, password: this.state.password};
+      if(this.state.password !== this.state.confirmPassword) {
+        this.setState({open: true, message: "Confirmation password doesn't match the password"});
+    } else {
       await fetch(REGISTER_URL, {
         method: 'POST',
         mode: "cors",
@@ -82,9 +85,6 @@ class SignUp extends Component {
         if(user.errors && user.errors.username.name === "ValidatorError") {
           throw new Error("There's already a user with given username")
         }
-        if(this.state.password !== this.state.confirmPassword) {
-          throw new Error("Confirmation password doesn't match the password")
-      }
         if(!user.token) {
           throw new Error("Failed to register")
         }
@@ -95,6 +95,7 @@ class SignUp extends Component {
       .catch(err => {
         this.setState({open: true, message: err.message})
       });
+    }
     }
 
     handleClose() {

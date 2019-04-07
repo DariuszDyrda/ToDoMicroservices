@@ -80,15 +80,17 @@ class ButtonAppBar extends Component {
      settingsItem = null;
     } else {
       signInButton = (<Button color="inherit" onClick={this.handleLogOut}>Logout</Button>)
-      settingsItem = (<ListItem button key={"Settings"}><Link to='/settings' style={{textDecoration: 'none', color: 'white'}}><ListItemText primary={"Settings"} /></Link></ListItem>)
+      settingsItem = (<Link to='/settings' style={{textDecoration: 'none', color: 'white'}}><ListItem button key={"Settings"}><ListItemText primary={"Settings"} /></ListItem></Link>)
     }
 
     const sideList = (
       <div className={classes.list}>
         <List>
+          <Link to='/about' style={{textDecoration: 'none', color: 'white'}}>
             <ListItem button key={"About"}>
-            <Link to='/about' style={{textDecoration: 'none', color: 'white'}}><ListItemText primary={"About"} /></Link>
+            <ListItemText primary={"About"} />
             </ListItem>
+          </Link>
             {settingsItem}
         </List>
       </div>
