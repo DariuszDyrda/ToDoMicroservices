@@ -5,7 +5,10 @@ let defaultState = {
   todos: [], 
   token: null, 
   redirectTo: null,
-  appLoaded: false
+  appLoaded: false,
+  settings: {
+    dontShowCompletedTasks: null
+  }
 }
 
 function reducer(state = defaultState, action) {
@@ -65,6 +68,11 @@ function reducer(state = defaultState, action) {
         case "REDIRECT": {
           let redirectTo = null;
           let newState = Object.assign({}, state, { redirectTo });
+          return newState;
+        }
+        case "SETTINGS_CHANGE": {
+          let settings = action.settings;
+          let newState = Object.assign({}, state, { settings });
           return newState;
         }
         default:

@@ -19,7 +19,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { store } from '../../store';
 import { push } from 'connected-react-router';
 
-import { login } from '../../actions/actionTypes'
+import { login, setSettings } from '../../actions/actionTypes'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
@@ -112,6 +112,7 @@ class Login extends Component {
             throw new Error("Incorrect username or password")
           }
             window.localStorage.setItem('token', user.token);
+            this.props.setSettings(user.settings);
             this.props.login(user);
         })
         .catch(err => {
@@ -198,6 +199,7 @@ class Login extends Component {
 function mapDispatchToProps(dispatch) {
   return {
       login: (user) => dispatch(login(user)),
+      setSettings: (settings) => dispatch(setSettings(settings))
   }
 }
 

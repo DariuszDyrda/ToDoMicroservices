@@ -8,11 +8,15 @@ import Login from './loginPage/Login';
 import SignUp from './loginPage/SignUpPage'
 import LandingPage from './LandingPage'
 import Todos from './mainAppPage/Todos';
+import About from './About';
+import Settings from './Settings';
 
 import { connect } from 'react-redux';
-import { appLoad, onRedirect } from '../actions/actionTypes';
+import { appLoad, onRedirect, setSettings } from '../actions/actionTypes';
 import { compose } from 'recompose';
 import { store }  from '../store';
+
+const API_URL = 'api/settings/';
 
 
 const styles = {
@@ -31,9 +35,19 @@ class App extends Component {
       }
     }
 
-  componentWillMount() {
+  async componentWillMount() {
       const token = window.localStorage.getItem('token');
       let redirectTo = token ? '/todos' : null;
+      let settings = await fetch(API_URL, {
+        method: "GET",
+          mode: "cors",
+          headers: {
+            'authorization': `Bearer ${token}`,
+        },
+      }).then(data => data.json())
+      .then(data => data)
+      .catch(err => null);
+      this.props.setSettings(settings);
       this.props.appLoad(token, redirectTo);
     }
   
@@ -52,6 +66,8 @@ class App extends Component {
                   <Route path="/todos" component={Todos} />
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={SignUp} />
+                  <Route path="/about" component={About} />
+                  <Route path="/settings" component={Settings} />
                 </Switch>
             </div>
             </ConnectedRouter>
@@ -70,7 +86,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     appLoad: (token, redirectTo) => dispatch(appLoad(token, redirectTo)),
-    onRedirect: () => dispatch(onRedirect())
+    onRedirect: () => dispatch(onRedirect()),
+    setSettings: (settings) => dispatch(setSettings(settings))
   }
 }
 

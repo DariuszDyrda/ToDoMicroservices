@@ -27,8 +27,26 @@ router.post("/register", (req, res) => {
         }
     })
 })
-router.get("/secret", auth.optional, (req, res) => {
-  let user = req.user ? req.user.username : "Noone";
-  res.json({message: `Congrats! You've reached a secret route as ${user}!`});
+router.put("/settings", auth.required, (req, res) => {
+  User.findOne({username: req.user.username}, (err, user) => {
+    var settings = {dontShowCompletedTasks: req.body.dontShowCompletedTasks};
+    user.settings = settings;
+    user.save((err => {
+      if(err) {
+        res.json(err);
+      }
+    }))
+    res.json(user.settings);
+})
+})
+router.get("/settings", auth.required, (req, res) => {
+  User.findOne({username: req.user.username}, (err, user) => {
+    if(err) {
+      res.send(err);
+    }
+    else {
+      res.json(user.settings);
+    }
+  })
 })
 module.exports = router;

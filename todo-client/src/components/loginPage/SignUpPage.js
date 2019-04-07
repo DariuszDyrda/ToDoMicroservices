@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { login, register } from '../../actions/actionTypes'
+import { login, register, setSettings } from '../../actions/actionTypes'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
@@ -88,6 +88,7 @@ class SignUp extends Component {
         if(!user.token) {
           throw new Error("Failed to register")
         }
+        this.props.setSettings(user.settings);
         this.props.register(user);
         window.localStorage.setItem('token', user.token);
       })
@@ -180,7 +181,8 @@ class SignUp extends Component {
 function mapDispatchToProps(dispatch) {
   return {
       login: (user) => dispatch(login(user)),
-      register: (user) => dispatch(register(user))
+      register: (user) => dispatch(register(user)),
+      setSettings: (settings) => dispatch(setSettings(settings))
   }
 }
 

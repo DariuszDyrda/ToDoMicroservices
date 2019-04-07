@@ -90,7 +90,14 @@ class TodoList extends Component {
         }
         return (
             <List className={classes.root}>
-              {this.props.todos.map(value => (
+              {this.props.todos
+              .filter(task => {
+                if(this.props.settings.dontShowCompletedTasks) {
+                  return task.completed === false;
+                }
+                return task;
+              })
+              .map(value => (
                 <div key={value._id} style={{display: 'flex'}}>
                 <ListItem role={undefined} button
                   onClick={this.handleToggle.bind(this, value)}>

@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import Drawer from '@material-ui/core/Drawer';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
@@ -61,23 +62,34 @@ class ButtonAppBar extends Component {
   }
   render() {
     const { classes } = this.props;
+
+    let iconButton = window.location.pathname === '/settings' ? 
+      (<IconButton className={classes.menuButton} color="inherit" aria-label="Back">
+        <Link to='/todos' style={{textDecoration: 'none', color: 'white'}}><ArrowBack /></Link>
+      </IconButton>) : 
+      (<IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
+        <MenuIcon />
+      </IconButton>)
+
     let signInButton = null;
     let signUpButton = null;
+    let settingsItem = null;
     if(!this.props.token) {
      signInButton = (<Link to='/login' style={{textDecoration: 'none', color: 'white'}}><Button color="inherit">Sign In</Button></Link>);
      signUpButton = (<Link to='/register' style={{textDecoration: 'none', color: 'white'}}><Button color="inherit">Sign Up</Button></Link>);
+     settingsItem = null;
     } else {
       signInButton = (<Button color="inherit" onClick={this.handleLogOut}>Logout</Button>)
+      settingsItem = (<ListItem button key={"Settings"}><Link to='/settings' style={{textDecoration: 'none', color: 'white'}}><ListItemText primary={"Settings"} /></Link></ListItem>)
     }
 
     const sideList = (
       <div className={classes.list}>
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemText primary={text} />
+            <ListItem button key={"About"}>
+            <Link to='/about' style={{textDecoration: 'none', color: 'white'}}><ListItemText primary={"About"} /></Link>
             </ListItem>
-          ))}
+            {settingsItem}
         </List>
       </div>
     );
@@ -86,9 +98,7 @@ class ButtonAppBar extends Component {
         <div className={classes.root}>
         <AppBar position="static">
             <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
-                <MenuIcon />
-            </IconButton>
+            {iconButton}
             <Drawer open={this.state.drawer} onClose={this.toggleDrawer(false)}>
               <div
                 tabIndex={0}

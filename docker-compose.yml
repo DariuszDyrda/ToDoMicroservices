@@ -18,10 +18,12 @@ services:
     volumes:
       - /app/node_modules
       - ./TodoAPI:/usr/src/app
+    command: npm run dev
   client:
+    volumes:
+      - /todo-client/node_modules
+      - ./todo-client/:/usr/src/app
     build:
       dockerfile: Dockerfile.dev
       context: ./todo-client
-    volumes:
-      - /app/node_modules
-      - ./todo-client:/usr/src/app
+    command: npm start

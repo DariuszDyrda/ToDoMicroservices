@@ -59,3 +59,10 @@ export function onRedirect() {
         type: "REDIRECT"
     }
 }
+
+export function setSettings(settings) {
+    return {
+        type: "SETTINGS_CHANGE",
+        settings
+    }
+}

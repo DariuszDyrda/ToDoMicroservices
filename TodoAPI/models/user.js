@@ -13,6 +13,12 @@ var UserSchema = new Schema({
     required: true
   },
   todos: [{type: Schema.Types.ObjectId, ref: 'todo'}],
+  settings: {
+    dontShowCompletedTasks: {
+      type: Boolean,
+      default: false
+    }
+  },
   hash: {
     type: String
   },
@@ -38,6 +44,7 @@ UserSchema.methods.generateJWT = function () {
 UserSchema.methods.toAuthJSON = function() {
   return {
     username: this.username,
+    settings: this.settings,
     token: this.generateJWT()
   }
 }
