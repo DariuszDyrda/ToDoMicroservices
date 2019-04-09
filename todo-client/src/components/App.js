@@ -37,7 +37,13 @@ class App extends Component {
 
   async componentWillMount() {
       const token = window.localStorage.getItem('token');
-      let redirectTo = token ? '/todos' : null;
+      let redirectTo = null;
+      if(token && window.location.pathname === '/') {
+        redirectTo = '/todos';
+      } else {
+        redirectTo = window.location.pathname;
+      }
+      
       let settings = await fetch(API_URL, {
         method: "GET",
           mode: "cors",

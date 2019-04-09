@@ -66,3 +66,10 @@ export function setSettings(settings) {
         settings
     }
 }
+
+export function redirectUnauthorizedAccess(redirectTo) {
+    return {
+        type: "REDIRECT_UNAUTHORIZED_ACCESS",
+        redirectTo
+    }
+}

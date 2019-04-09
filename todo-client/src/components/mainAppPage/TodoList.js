@@ -7,8 +7,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { connect } from 'react-redux';
-import { loadTodos, toggleCheck, deleteTodo } from '../../actions/actionTypes';
+import { loadTodos, toggleCheck, deleteTodo, redirectUnauthorizedAccess, onRedirect } from '../../actions/actionTypes';
 import { compose } from 'recompose';
+import { store }  from '../../store';
+import { push } from 'connected-react-router';
 
 const API_URL = `/api/todos/`
 
@@ -27,6 +29,13 @@ class TodoList extends Component {
     constructor(props) {
         super(props);
         this.handleToggle = this.handleToggle.bind(this);
+    }
+
+    componentDidUpdate() {
+      if(this.props.redirectTo) {
+          store.dispatch(push(this.props.redirectTo));
+          this.props.onRedirect();
+      }
     }
 
     async handleToggle(value) {
@@ -84,9 +93,7 @@ class TodoList extends Component {
     render() {
         const { classes } = this.props;
         if(!this.props.token) {
-          return (
-            <div>LOADING... TodoList</div>
-          )
+            this.props.redirectUnauthorizedAccess('/login');
         }
         return (
             <List className={classes.root}>
@@ -121,6 +128,8 @@ function mapDispatchToProps(dispatch) {
         loadTodos: (todos) => dispatch(loadTodos(todos)),
         toggleCheck: (todo) => dispatch(toggleCheck(todo)),
         deleteTodo: (todo) => dispatch(deleteTodo(todo)),
+        redirectUnauthorizedAccess: (redirectTo) => dispatch(redirectUnauthorizedAccess(redirectTo)),
+        onRedirect: () => dispatch(onRedirect())
     }
 }
 function mapStateToProps(state) {

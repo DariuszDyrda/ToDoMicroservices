@@ -70,6 +70,11 @@ function reducer(state = defaultState, action) {
           let newState = Object.assign({}, state, { redirectTo });
           return newState;
         }
+        case "REDIRECT_UNAUTHORIZED_ACCESS": {
+          let redirectTo = action.redirectTo;
+          let newState = Object.assign({}, state, { redirectTo });
+          return newState;
+        }
         case "SETTINGS_CHANGE": {
           let settings = action.settings;
           let newState = Object.assign({}, state, { settings });

@@ -4,9 +4,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 
-import { setSettings } from '../actions/actionTypes'
+import { setSettings, redirectUnauthorizedAccess, onRedirect } from '../actions/actionTypes'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { store } from '../store';
+import { push } from 'connected-react-router';
 
 const API_URL = '/api/settings';
 
@@ -26,9 +28,17 @@ class Settings extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
     }
+    componentDidUpdate() {
+        if(this.props.redirectTo) {
+            store.dispatch(push(this.props.redirectTo));
+            this.props.onRedirect();
+        }
+      }
     componentWillMount() {
-        let value = this.props.settings.dontShowCompletedTasks;
-        this.setState({dontShowCompletedTasks: value});
+        if(this.props.token) {
+            let value = this.props.settings.dontShowCompletedTasks;
+            this.setState({dontShowCompletedTasks: value});
+        }
     }
     async handleChange() {
         let value = !this.state.dontShowCompletedTasks;
@@ -51,6 +61,9 @@ class Settings extends Component {
     }
     render() {
         const { classes } = this.props;
+        if(!this.props.token) {
+            this.props.redirectUnauthorizedAccess('/login');
+        }
         return (
             <div className={classes.root}>
                 <FormGroup row>
@@ -72,7 +85,9 @@ class Settings extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        setSettings: (settings) => dispatch(setSettings(settings))
+        setSettings: (settings) => dispatch(setSettings(settings)),
+        onRedirect: () => dispatch(onRedirect()),
+        redirectUnauthorizedAccess: (redirectTo) => dispatch(redirectUnauthorizedAccess(redirectTo))
     }
   }
   

@@ -19,7 +19,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { store } from '../../store';
 import { push } from 'connected-react-router';
 
-import { login, setSettings } from '../../actions/actionTypes'
+import { login, setSettings, onRedirect } from '../../actions/actionTypes'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
@@ -199,7 +199,8 @@ class Login extends Component {
 function mapDispatchToProps(dispatch) {
   return {
       login: (user) => dispatch(login(user)),
-      setSettings: (settings) => dispatch(setSettings(settings))
+      setSettings: (settings) => dispatch(setSettings(settings)),
+      onRedirect: () => dispatch(onRedirect())
   }
 }
 
