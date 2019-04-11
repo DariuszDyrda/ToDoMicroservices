@@ -30,6 +30,8 @@ class About extends Component {
                   <ListItem>NodeJS</ListItem>
                   <ListItem>Express</ListItem>
                   <ListItem>Mongoose</ListItem>
+                  <ListItem>PassportJS</ListItem>
+                  <ListItem>JSON Web Tokens</ListItem>
                 </List>
               </Paper>
             </Grid>
