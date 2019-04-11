@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid'
-import ButtonAppBar from './mainAppPage/ButtonAppBar';
 import { Route, Switch } from "react-router-dom";
-import { ConnectedRouter, push } from 'connected-react-router'
+import { ConnectedRouter, push } from 'connected-react-router';
+
+import ButtonAppBar from './mainAppPage/ButtonAppBar';
 import Login from './loginPage/Login';
 import SignUp from './loginPage/SignUpPage'
 import LandingPage from './LandingPage'
@@ -44,16 +45,18 @@ class App extends Component {
         redirectTo = window.location.pathname;
       }
       
-      let settings = await fetch(API_URL, {
+      await fetch(API_URL, {
         method: "GET",
           mode: "cors",
           headers: {
             'authorization': `Bearer ${token}`,
         },
       }).then(data => data.json())
-      .then(data => data)
+      .then(data => {
+        this.props.setSettings(data);
+      })
       .catch(err => null);
-      this.props.setSettings(settings);
+
       this.props.appLoad(token, redirectTo);
     }
   

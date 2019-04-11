@@ -39,7 +39,7 @@ class Form extends Component {
     async handleSubmit(e) {
         e.preventDefault();
         let newTodo = {task: this.state.inputVal};
-        let todo = await fetch(API_URL, {
+        await fetch(API_URL, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -49,9 +49,10 @@ class Form extends Component {
             body: JSON.stringify(newTodo),
         })
         .then(data => data.json())
-        .then(data => data)
+        .then(data => {
+            this.props.addNewTodo(data);
+        })
         .catch(err => console.log(err));
-        this.props.addNewTodo(todo);
 
         this.setState({inputVal: ''});
     }

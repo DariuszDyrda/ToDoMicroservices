@@ -41,7 +41,7 @@ class TodoList extends Component {
     async handleToggle(value) {
       const url = API_URL + value._id;
       let checked = !(value.completed);
-      let todo = await fetch(url, {
+      await fetch(url, {
         method: "PUT", // *GET, POST, PUT, DELETE, etc.
         mode: "cors",
         headers: {
@@ -51,15 +51,15 @@ class TodoList extends Component {
         body:JSON.stringify({"completed": checked.toString()}), // body data type must match "Content-Type" header
       })
       .then(data =>  data.json())
-      .then(todo => todo)
+      .then(todo => {
+        this.props.toggleCheck(todo);
+      })
       .catch(err => console.log(err));
-
-      this.props.toggleCheck(todo);
       };
 
     async handleDelete(value) {
         const url = API_URL + value._id;
-        let deletedTodo = await fetch(url, {
+        await fetch(url, {
           method: "DELETE",
           mode: "cors",
           headers: {
@@ -67,10 +67,10 @@ class TodoList extends Component {
         },
         })
         .then(data => data.json())
-        .then(data => data)
+        .then(data => {
+          this.props.deleteTodo(data);
+        })
         .catch(err => console.log(err));
-
-        this.props.deleteTodo(deletedTodo);
       }
 
 
