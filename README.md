@@ -31,12 +31,15 @@ You can set up Travis Continous Integration by changing DockerHub and AWS creden
 
 * Docker
 * AWS
+* Travis CI
 * nginx
 * MongoDB
+* MongoDB Atlas
 
 ### Backend:
 
 * NodeJS
+* Express
 * Mongoose
 * JWT
 * PassportJS
