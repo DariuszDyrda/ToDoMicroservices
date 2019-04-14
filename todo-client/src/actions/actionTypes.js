@@ -13,10 +13,12 @@ export function toggleCheck(todo) {
 }
 
 export function addNewTodo(todo) {
-    return {
+    return Promise.resolve(
+    {
         type: "ADD_NEW_TODO",
         todo
     }
+    )
 }
 
 export function deleteTodo(todo) {
@@ -46,10 +48,11 @@ export function logout() {
     }
 }
 
-export function appLoad(token, redirectTo) {
+export function appLoad(token, socket, redirectTo) {
     return {
         type: "APP_LOAD",
         token,
+        socket,
         redirectTo
     }
 }
@@ -64,6 +67,13 @@ export function setSettings(settings) {
     return {
         type: "SETTINGS_CHANGE",
         settings
+    }
+}
+
+export function setSocket(socket) {
+    return {
+        type: "SET_SOCKET",
+        socket
     }
 }
 

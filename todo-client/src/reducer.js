@@ -4,6 +4,7 @@ import { connectRouter } from 'connected-react-router';
 let defaultState = {
   todos: [], 
   token: null, 
+  socket: null,
   redirectTo: null,
   appLoaded: false,
   settings: {
@@ -60,9 +61,10 @@ function reducer(state = defaultState, action) {
         }
         case "APP_LOAD": {
           let token = action.token;
+          let socket = action.socket;
           let redirectTo = action.redirectTo;
           let appLoaded = true;
-          let newState = Object.assign({}, state, {token, redirectTo, appLoaded});
+          let newState = Object.assign({}, state, {token, socket, redirectTo, appLoaded});
           return newState;
         }
         case "REDIRECT": {
@@ -78,6 +80,11 @@ function reducer(state = defaultState, action) {
         case "SETTINGS_CHANGE": {
           let settings = action.settings;
           let newState = Object.assign({}, state, { settings });
+          return newState;
+        }
+        case "SET_SOCKET": {
+          let socket = action.socket;
+          let newState = Object.assign({}, state, { socket });
           return newState;
         }
         default:

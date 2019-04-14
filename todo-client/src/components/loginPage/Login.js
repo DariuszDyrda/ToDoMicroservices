@@ -17,9 +17,10 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { store } from '../../store';
 import { push } from 'connected-react-router';
 
-import { login, setSettings, onRedirect } from '../../actions/actionTypes'
+import { login, setSettings, onRedirect, setSocket } from '../../actions/actionTypes'
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { connectToSocketServer } from '../../actions/socket';
 
 const LOGIN_URL = `/api/login`
 
@@ -111,6 +112,7 @@ class Login extends Component {
           }
             window.localStorage.setItem('token', user.token);
             this.props.setSettings(user.settings);
+            this.props.setSocket(connectToSocketServer());
             this.props.login(user);
         })
         .catch(err => {
@@ -194,6 +196,7 @@ function mapDispatchToProps(dispatch) {
   return {
       login: (user) => dispatch(login(user)),
       setSettings: (settings) => dispatch(setSettings(settings)),
+      setSocket: (socket) => dispatch(setSocket(socket)),
       onRedirect: () => dispatch(onRedirect())
   }
 }

@@ -50,7 +50,13 @@ class Form extends Component {
         })
         .then(data => data.json())
         .then(data => {
-            this.props.addNewTodo(data);
+            this.props.addNewTodo(data).then(() => {
+                console.log('hey');
+                setTimeout(() => {
+                    this.props.socket.emit('change');
+                }, 500);
+                
+            });
         })
         .catch(err => console.log(err));
 

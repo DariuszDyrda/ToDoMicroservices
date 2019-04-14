@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { appLoad, onRedirect, setSettings } from '../actions/actionTypes';
 import { compose } from 'recompose';
 import { store }  from '../store';
+import { connectToSocketServer } from '../actions/socket';
 
 const API_URL = 'api/settings/';
 
@@ -39,7 +40,9 @@ class App extends Component {
   async componentWillMount() {
       const token = window.localStorage.getItem('token');
       let redirectTo = null;
+      let socket = null;
       if(token && window.location.pathname === '/') {
+        socket = connectToSocketServer();
         redirectTo = '/todos';
       } else {
         redirectTo = window.location.pathname;
@@ -57,7 +60,7 @@ class App extends Component {
       })
       .catch(err => null);
 
-      this.props.appLoad(token, redirectTo);
+      this.props.appLoad(token, socket, redirectTo);
     }
   
   render() {
@@ -94,7 +97,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    appLoad: (token, redirectTo) => dispatch(appLoad(token, redirectTo)),
+    appLoad: (token, socket, redirectTo) => dispatch(appLoad(token, socket, redirectTo)),
     onRedirect: () => dispatch(onRedirect()),
     setSettings: (settings) => dispatch(setSettings(settings))
   }

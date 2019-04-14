@@ -52,6 +52,9 @@ class TodoList extends Component {
       })
       .then(data =>  data.json())
       .then(todo => {
+        if(this.props.socket) {
+          this.props.socket.emit('change');
+        }
         this.props.toggleCheck(todo);
       })
       .catch(err => console.log(err));
@@ -68,13 +71,15 @@ class TodoList extends Component {
         })
         .then(data => data.json())
         .then(data => {
+          if(this.props.socket) {
+            this.props.socket.emit('change');
+          }
           this.props.deleteTodo(data);
         })
         .catch(err => console.log(err));
       }
 
-
-    async componentWillMount() {
+    async loadTodos() {
       if(this.props.token) {
         await fetch(API_URL, {
           mode: 'cors',
@@ -88,6 +93,16 @@ class TodoList extends Component {
           })
           .catch(err => console.log(err));
       }
+    }
+
+
+    componentWillMount() {
+        if(this.props.socket) {
+          this.props.socket.on('change', () => {
+            this.loadTodos();
+          });
+        }
+        this.loadTodos();
       }
 
     render() {
