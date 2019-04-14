@@ -14,7 +14,9 @@ services:
       dockerfile: Dockerfile.dev
       context: ./TodoAPI
     environment:
-      - mongoURL=mongodb://mongo:27017/todos
+      #- mongoURL=mongodb://mongo:27017/todos
+      #ONLY FOR DEVELOPMENT
+      - mongoURL=mongodb://admin:admin123@ds135726.mlab.com:35726/todos-test
     volumes:
       - /app/node_modules
       - ./TodoAPI:/usr/src/app
