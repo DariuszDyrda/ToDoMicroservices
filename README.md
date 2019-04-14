@@ -43,6 +43,7 @@ You can set up Travis Continous Integration by changing DockerHub and AWS creden
 * Mongoose
 * JWT
 * PassportJS
+* SocketIO
 
 ### Frontend:
 
@@ -50,3 +51,4 @@ You can set up Travis Continous Integration by changing DockerHub and AWS creden
 * React Router
 * Redux
 * MaterialUI
+* SocketIO-client
