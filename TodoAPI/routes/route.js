@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Todo = require('../models/todo');
 const User = require('../models/user')
 const auth = require('./auth')
+const io = require('../services/socket').getio();
 
 router.get('/todos', auth.required, (req, res) => {
     User.findOne({username: req.user.username}).populate('todos').exec((err, user) => {
@@ -27,6 +28,10 @@ router.post('/todos', auth.required, (req, res) => {
                         res.json(err);
                     }
                 })
+                // 500ms timout to compensate database deley
+                setTimeout(() => {
+                    io.to(user.username).emit('change');
+                }, 500)
                 return res.json(newTodo);
             }
         })
@@ -58,6 +63,7 @@ router.put('/todos/:id', auth.required, (req, res) => {
                     _id: userId
                 }
             }
+            io.to(username).emit('change');
 
             res.json(result);
         }
@@ -82,7 +88,7 @@ router.delete('/todos/:id', auth.required, (req, res) => {
                     _id: userId
                 }
             }
-
+            io.to(username).emit('change');
             res.json(result);
         }
     });

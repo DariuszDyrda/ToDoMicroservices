@@ -45,7 +45,8 @@ router.get("/settings", auth.required, (req, res) => {
       res.send(err);
     }
     else {
-      res.json(user.settings);
+      let result = { ...user.settings, username: user.username }
+      res.json(result);
     }
   })
 })

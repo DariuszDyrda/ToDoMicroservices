@@ -52,9 +52,6 @@ class TodoList extends Component {
       })
       .then(data =>  data.json())
       .then(todo => {
-        if(this.props.socket) {
-          this.props.socket.emit('change');
-        }
         this.props.toggleCheck(todo);
       })
       .catch(err => console.log(err));
@@ -71,9 +68,6 @@ class TodoList extends Component {
         })
         .then(data => data.json())
         .then(data => {
-          if(this.props.socket) {
-            this.props.socket.emit('change');
-          }
           this.props.deleteTodo(data);
         })
         .catch(err => console.log(err));

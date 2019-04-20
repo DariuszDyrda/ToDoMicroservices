@@ -90,7 +90,7 @@ class SignUp extends Component {
           throw new Error("Failed to register")
         }
         this.props.setSettings(user.settings);
-        this.props.setSocket(connectToSocketServer());
+        this.props.setSocket(connectToSocketServer(user.username));
         this.props.register(user);
         window.localStorage.setItem('token', user.token);
       })

@@ -2,7 +2,6 @@ import { createBrowserHistory } from 'history'
 import { applyMiddleware, compose, createStore } from 'redux'
 import { routerMiddleware } from 'connected-react-router'
 import createRootReducer from './reducer'
-import promiseMiddleware from 'redux-promise';
 
 export const history = createBrowserHistory()
 
@@ -14,7 +13,6 @@ function configureStore(preloadedState) {
     composeEnhancer(
       applyMiddleware(
         routerMiddleware(history),
-        promiseMiddleware
       ),
     ),
   )

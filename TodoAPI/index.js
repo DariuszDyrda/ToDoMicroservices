@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const server = require('http').Server(app);
 const passport = require('./config/passport')
-const io = require('socket.io')(server);
+const io = require('./services/socket').init(server);
+
 
 const dbURL = process.env.mongoURL ? process.env.mongoURL : 'mongodb://localhost:27017/myapp';
 var db = mongoose.connection;
@@ -42,15 +43,25 @@ app.use(passport.initialize());
 app.use(require("./routes/route"));
 app.use(require("./routes/user"));
 
+io.on('connection', function(client) {
+  let room = null;
+  //console.log(username);
+  client.on('room', (username) => {
+    room = username; 
+    console.log("Room join order");
+    client.join(room, () => {
+      console.log("Joined a room");
+    });
+  })
+
+  client.on('change', () => {
+      io.sockets.broadcast.to(room).emit('change');
+  });
+})
+
 server.listen(process.env.PORT || 8080, () => {
     console.log("The server has started!");
 })
 
-io.on('connection', (client) => {
-  console.log("Connection open for " + client.id);
-  client.on('change', () => {
-    console.log("Change occured!")
-    client.broadcast.emit('change');
-  });
-})
+
 module.exports = app;

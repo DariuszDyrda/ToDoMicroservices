@@ -41,24 +41,25 @@ class App extends Component {
       const token = window.localStorage.getItem('token');
       let redirectTo = null;
       let socket = null;
+      if(token) {
+        await fetch(API_URL, {
+          method: "GET",
+            mode: "cors",
+            headers: {
+              'authorization': `Bearer ${token}`,
+          },
+        }).then(data => data.json())
+        .then(data => {
+          socket = connectToSocketServer(data.username);
+          this.props.setSettings(data);
+        })
+        .catch(err => console.log(err));
+      }
       if(token && window.location.pathname === '/') {
-        socket = connectToSocketServer();
         redirectTo = '/todos';
       } else {
         redirectTo = window.location.pathname;
       }
-      
-      await fetch(API_URL, {
-        method: "GET",
-          mode: "cors",
-          headers: {
-            'authorization': `Bearer ${token}`,
-        },
-      }).then(data => data.json())
-      .then(data => {
-        this.props.setSettings(data);
-      })
-      .catch(err => null);
 
       this.props.appLoad(token, socket, redirectTo);
     }

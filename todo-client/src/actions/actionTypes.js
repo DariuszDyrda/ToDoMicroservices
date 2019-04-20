@@ -13,12 +13,10 @@ export function toggleCheck(todo) {
 }
 
 export function addNewTodo(todo) {
-    return Promise.resolve(
-    {
+    return {
         type: "ADD_NEW_TODO",
         todo
     }
-    )
 }
 
 export function deleteTodo(todo) {

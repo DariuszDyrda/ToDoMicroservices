@@ -112,7 +112,8 @@ class Login extends Component {
           }
             window.localStorage.setItem('token', user.token);
             this.props.setSettings(user.settings);
-            this.props.setSocket(connectToSocketServer());
+            console.log("Socket login ")
+            this.props.setSocket(connectToSocketServer(user.username));
             this.props.login(user);
         })
         .catch(err => {
