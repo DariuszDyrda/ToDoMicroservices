@@ -1,97 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const Todo = require('../models/todo');
-const User = require('../models/user')
 const auth = require('./auth')
 const io = require('../services/socket').getio();
+const TodosService = require('../services/TodosService')
 
-router.get('/todos', auth.required, (req, res) => {
-    User.findOne({username: req.user.username}).populate('todos').exec((err, user) => {
-        if(err) {
-            return res.json(err);
-        } 
-        return res.json(user.todos);
-    })
+router.get('/todos', auth.required, async (req, res) => {
+    let username = req.user.username;
+    let result = await TodosService.getTodos(username);
+    return res.json(result);
 })
 
-router.post('/todos', auth.required, (req, res) => {
-    User.findOne({username: req.user.username}, (err, user) => {
-        var newTodo = new Todo({task: req.body.task, completed: req.body.completed || false, user: user._id});
-        newTodo.save((err) => {
-            if(err) {
-                return res.json(err)
-            } else {
-                user.todos.push(newTodo._id)
-                user.save((err) => {
-                    if(err) {
-                        res.json(err);
-                    }
-                })
-                // 500ms timout to compensate database deley
-                setTimeout(() => {
-                    io.to(user.username).emit('change');
-                }, 500)
-                return res.json(newTodo);
-            }
-        })
-    })
+router.post('/todos', auth.required, async (req, res) => {
+   let username = req.user.username;
+   let result = await TodosService.postTodo(username, req.body);
+   res.json(result);
+   setTimeout(()=> {
+    io.to(username).emit('change');
+   }, 500)
 })
 
-router.put('/todos/:id', auth.required, (req, res) => {
-    Todo.findById(req.params.id).populate('user').exec((err, todo) => {
-        if(err || req.user.username !== todo.user.username) {
-            res.json({message: "Error occured"});
-        }
-        else {
-            if(req.body.task) {
-                todo.task = req.body.task;
-            }
-            if(req.body.completed) {
-                todo.completed = req.body.completed;
-            }
-            todo.save();
-            const { username, _id: userId } = todo.user;
-            const { task, completed, _id } = todo;
-
-            let result = {
-                _id,
-                task,
-                completed,
-                user: {
-                    username,
-                    _id: userId
-                }
-            }
-            io.to(username).emit('change');
-
-            res.json(result);
-        }
-    });
+router.put('/todos/:id', auth.required, async (req, res) => {
+    let id = req.params.id;
+    let username = req.user.username;
+    let result = await TodosService.putTodo(id, username, req.body);
+    res.json(result);
+    io.to(username).emit('change');
 })
 
-router.delete('/todos/:id', auth.required, (req, res) => {
-    Todo.findByIdAndRemove(req.params.id).populate('user').exec((err, todo) => {
-        if(err || req.user.username !== todo.user.username) {
-            let error = err ? err : new Error("You don't have access to these instance");
-            return res.json(error);
-        } else {
-            const { username, _id: userId } = todo.user;
-            const { task, completed, _id } = todo;
-
-            let result = {
-                _id,
-                task,
-                completed,
-                user: {
-                    username,
-                    _id: userId
-                }
-            }
-            io.to(username).emit('change');
-            res.json(result);
-        }
-    });
+router.delete('/todos/:id', auth.required, async (req, res) => {
+    let id = req.params.id;
+    let username = req.user.username;
+    let result = await TodosService.deleteTodo(id, username);
+    res.json(result);
+    io.to(username).emit('change');
 })
 
 module.exports = router;
