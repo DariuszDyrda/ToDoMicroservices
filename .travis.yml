@@ -4,9 +4,11 @@ services:
 
 before_install:
   - docker build -t dariuszdyrda/react-test -f ./todo-client/Dockerfile.dev ./todo-client
+  - docker build -t dariuszdyrda/api-test -f ./TodoAPI/Dockerfile.dev ./TodoAPI
 
 script:
   - docker run dariuszdyrda/react-test npm test -- --coverage
+  - docker run dariuszdyrda/api-test npm test -- --exit
 
 after_success:
   - docker build -t dariuszdyrda/multi-client ./todo-client
