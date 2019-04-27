@@ -8,7 +8,15 @@ let server = require('../index');
 let should = chai.should();
 
 describe("Verify password", () => {
+    before((done) => {
+        User.remove({}, (err) => {
+            done();
+        })
+    });
     beforeEach((done) => { //Before each test we empty the database
+        User.remove({}, (err) => {
+            
+        })
         let user = new User({username: 'Darek'});
         user.save((err) => {
             if(err) {
@@ -28,7 +36,6 @@ describe("Verify password", () => {
             if(err) {
                 console.log(err);
             } else {
-                console.log(users);
                 let user = users[0];
                 user.setPassword('12345');
                 user.should.have.property('hash');

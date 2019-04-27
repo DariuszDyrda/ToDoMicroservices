@@ -12,7 +12,12 @@ router.get('/todos', auth.required, async (req, res) => {
 
 router.post('/todos', auth.required, async (req, res) => {
    let username = req.user.username;
-   let result = await TodosService.postTodo(username, req.body);
+   let result = null;
+   try {
+    result = await TodosService.postTodo(username, req.body);
+   } catch(e) {
+    return res.json(e);
+   }
    res.json(result);
    setTimeout(()=> {
     io.to(username).emit('change');
@@ -30,7 +35,12 @@ router.put('/todos/:id', auth.required, async (req, res) => {
 router.delete('/todos/:id', auth.required, async (req, res) => {
     let id = req.params.id;
     let username = req.user.username;
-    let result = await TodosService.deleteTodo(id, username);
+    let result = null;
+    try {
+        result = await TodosService.deleteTodo(id, username);
+    } catch(e) {
+        return res.json(e);
+    }
     res.json(result);
     io.to(username).emit('change');
 })
