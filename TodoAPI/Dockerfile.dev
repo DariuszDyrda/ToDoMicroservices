@@ -3,6 +3,6 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
-ARG dbARG=0
+ARG dbARG=mongodb://localhost:27017/myapp
 ENV mongoURL=$dbARG
 CMD [ "npm", "run", "dev" ]

@@ -1,3 +1,3 @@
-const secret = "secret";
+const secret = 'secret';
 
 module.exports = secret;
